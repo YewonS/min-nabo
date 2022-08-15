@@ -3,7 +3,8 @@ import type { NextPage } from 'next';
 const Home: NextPage = () => {
   return (
     // tailwind is mobile-first approach
-    <div className="bg-slate-400 xl:place-content-center py-20 px-10 grid gap-10 min-h-screen xl:grid-cols-3">
+    // customizing CSS with JIS(Just In Time) compiler: text-[20px] text-[#000] bg-[url('./vercel.svg')]
+    <div className="bg-slate-400 dark xl:place-content-center py-20 px-10 grid gap-10 min-h-screen xl:grid-cols-3">
       <div className="bg-white dark:bg-black dark:text-white sm:bg-red-200 md:bg-teal-200 lg:bg-indigo-200 xl:bg-yellow-200 2xl:bg-pink-200 p-6 rounded-2xl shadow-xl">
         <span className="font-semibold text-3xl">Select item</span>
         <ul>

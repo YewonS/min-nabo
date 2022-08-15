@@ -7,7 +7,7 @@ module.exports = {
   theme: {
     extend: {},
   },
-  darkMode: "class", 
-  // media: preference vs class: like a btn
+  darkMode: "media", 
+  // media: as preference VS class: like a btn to toggle the dark mode
   plugins: [],
 }
