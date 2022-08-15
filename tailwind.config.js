@@ -9,5 +9,7 @@ module.exports = {
   },
   darkMode: "media", 
   // media: preference vs class: like a btn
-  plugins: [],
+  plugins: [
+    require("@tailwindcss/forms")
+  ],
 }
