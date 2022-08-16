@@ -5,7 +5,11 @@ import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false;
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+  return (
+    <div className="w-full max-w-lg mx-auto">
+      <Component {...pageProps} /> 
+    </div>
+  );
 }
 
 export default MyApp;

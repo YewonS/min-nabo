@@ -2,10 +2,10 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAt, faPhone, } from "@fortawesome/free-solid-svg-icons";
 import { faGithub, faGoogle } from "@fortawesome/free-brands-svg-icons";
+import { joinClassNames } from "../libs/utils";
+import Button from "../components/button";
+import Input from "../components/input";
 
-function joinClassNames(...classnames: string[]) {
-  return classnames.join(" ");
-}
 
 export default function Enter() {
   const [method, setMethod] = useState<"email" | "phone">("email");
@@ -34,37 +34,23 @@ export default function Enter() {
           </div>
         </div>
         {/* Login form */}
-        <form className="flex flex-col mt-8 px-4">
-          <label className="text-sm font-medium text-gray-700">
-            {method === "email" ? "Email address" : null}
-            {method === "phone" ? "Phone number" : null}
-          </label>
-          <div className="mt-1">
-            {method === "email" ? 
-              <input 
-                type="email" 
-                className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 
-                          focus:outline-none focus:ring-orange-500 focus:border-orange-500" 
-                required 
-              /> : null}
-            {method === "phone" ? (
-              <div className="flex rounded-md shadow-sm">
-                <span 
-                  className="flex items-center justify-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 select-none text-sm"
-                >+45</span>
-                <input type="tel" pattern="[0-9]{8}" 
-                  className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md rounded-l-none shadow-sm placeholder-gray-400 
-                  focus:outline-none focus:ring-orange-500 focus:border-orange-500" 
-                required />
-              </div>
-            ) : null}
-          </div>
-          <button 
-            className="mt-5 bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium 
-                      focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 focus:outline-none">
-            {method === "email" ? "Get login link" : null}
-            {method === "phone" ? "Get one-time password" : null}
-          </button>
+        <form className="flex flex-col mt-8 space-y-4 px-4">
+          {method === "email" ? (
+            <Input name="email" label="Email address" type="email" required />
+          ) : null}
+          {method === "phone" ? (
+            <Input
+              name="phone"
+              label="Phone number"
+              type="number"
+              kind="phone"
+              required
+            />
+          ) : null}
+          {method === "email" ? <Button text={"Get login link"} /> : null}
+          {method === "phone" ? (
+            <Button text={"Get one-time password"} />
+          ) : null}
         </form>
         {/* Social Network Login options */}
         <div className="mt-8 px-4">
