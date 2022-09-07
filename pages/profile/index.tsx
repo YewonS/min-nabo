@@ -1,18 +1,38 @@
 import type { NextPage } from "next";
 import Link from "next/link";
-import Layout from "../../components/layout";
+import Layout from "@components/layout";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
+import useUser from "@libs/client/useUser";
+import useSWR from "swr";
+import { Review, User } from "@prisma/client";
+import { joinClassNames } from "@libs/client/utils";
+
+interface ReviewWithUser extends Review {
+  createdBy: User;
+}
+
+interface ReviewsResponse {
+  success: boolean;
+  reviews: ReviewWithUser[]
+}
 
 const Profile: NextPage = () => {
+  const {user} = useUser();
+  const {data} = useSWR<ReviewsResponse>("/api/reviews");
+
   return (
     <Layout hasTabBar title="Profile">
       <div className="px-4">
           {/* Profile */}
         <div className="flex items-center mt-4 space-x-3">
-          <div className="w-16 h-16 bg-slate-500 rounded-full" />
+          {
+            user?.avatar ? 
+            <img src={`https://imagedelivery.net/Qb7PA1G1cVeln13aN4KZiQ/${user?.avatar}/avatar`} className="w-16 h-16 bg-slate-500 rounded-full" />
+            : <div className="w-16 h-16 bg-slate-500 rounded-full" />
+          }
           <div className="flex flex-col">
-            <span className="font-medium text-gray-900">Steve Jebs</span>
+            <span className="font-medium text-gray-900">{user?.name}</span>
             <Link href="/profile/edit">
               <a className="text-sm text-gray-700">Edit profile &rarr;</a>
             </Link>
@@ -98,29 +118,28 @@ const Profile: NextPage = () => {
         </div>
 
       {/* Review */}
-        <div className="mt-12">
+      {data?.reviews.map(review =>
+        <div key={review.id} className="mt-12">
           <div className="flex space-x-4 items-center">
             <div className="w-12 h-12 rounded-full bg-slate-500" />
             <div>
-              <h4 className="text-sm font-bold text-gray-800">Niko</h4>
+              <h4 className="text-sm font-bold text-gray-800">{review.createdBy.name}</h4>
               <div className="flex items-center">
-                <FontAwesomeIcon icon={faStar} className="text-yellow-400 h-5 w-5" />
-                <FontAwesomeIcon icon={faStar} className="text-yellow-400 h-5 w-5" />
-                <FontAwesomeIcon icon={faStar} className="text-yellow-400 h-5 w-5" />
-                <FontAwesomeIcon icon={faStar} className="text-yellow-400 h-5 w-5" />
-                <FontAwesomeIcon icon={faStar} className="text-gray-400 h-5 w-5" />
+                {[1, 2, 3, 4, 5].map(star =>
+                  <div key={star}>
+                    <FontAwesomeIcon icon={faStar}  className={joinClassNames("h-5 w-5", review.score >= star ? "text-yellow-400" : "text-gray-400")} />
+                  </div>
+                )}
               </div>
             </div>
           </div>
           <div className="mt-4 text-gray-600 text-sm">
             <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            {review.review}
             </p>
           </div>
         </div>
+      )}
       </div>
     </Layout>
   );

@@ -2,25 +2,47 @@ import type { NextPage } from "next";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; 
 import { faHeart, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartRegular, faCommentDots } from "@fortawesome/free-regular-svg-icons";
-import Layout from "../components/layout";
-import FloatingButton from "../components/floatingBtn";
-import Item from "../components/item";
+import Layout from "@components/layout";
+import FloatingButton from "@components/floatingBtn";
+import Item from "@components/item";
+import useUser from "@libs/client/useUser";
+import Head from "next/head";
+import useSWR from "swr";
+import { Item as DBItem } from "@prisma/client";
+
+export interface itemWithCount extends DBItem {
+  _count: {
+    favs: number;
+  };
+}
+
+interface itemsResponse {
+  success: boolean;
+  items: itemWithCount[]
+}
 
 const Home: NextPage = () => {
+  const { user, isLoading } = useUser();
+  const { data } = useSWR<itemsResponse>("/api/items");
+  
   return (
     <Layout title="Home" hasTabBar={true}>
+      <Head>
+        <title>Home</title>
+      </Head>
       {/* List of items */}
       <div className="flex flex-col space-y-5">
-        {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, i) => (
+        {data?.items?.map((item) => (
            <Item
-           id={i}
-           key={i}
-           title="iPhone 14"
-           price={99}
-           comments={1}
-           hearts={1}
-         />
-       ))}
+            id={item.id}
+            key={item.id}
+            title={item.name}
+            price={item.price}
+            comments={1}
+            hearts={item._count.favs}
+            image={item.imageURL}
+          />
+        ))}
         {/* Add button */}
         <FloatingButton href="/items/upload">
           <svg

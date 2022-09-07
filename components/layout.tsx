@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { joinClassNames } from "../libs/utils";
+import { joinClassNames } from "@libs/client/utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; 
 import { faHouse, faNewspaper, faCommentDots, faVideo, faUser, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/router";
