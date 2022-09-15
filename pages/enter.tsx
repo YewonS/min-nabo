@@ -38,7 +38,6 @@ export default function Enter() {
     setMethod("phone"); 
   }
   const onValid = (formData: LoginForm) => {
-    console.log("formdata", formData)
     if (loading) return;
     login(formData);
   }

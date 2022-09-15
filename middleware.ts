@@ -1,18 +1,27 @@
-import { NextRequest, NextFetchEvent, userAgent, NextResponse } from "next/server";
+import { NextResponse, userAgent } from "next/server";
+import type { NextRequest, NextFetchEvent } from "next/server";
 
-export function middleware(req: NextRequest, event: NextFetchEvent) {
-    const { isBot } = userAgent(req);
-    if (isBot) {
-        return new Response("No bots allowed", { status: 403 });
+
+export function middleware(req: NextRequest, ev: NextFetchEvent) {
+    if (req.nextUrl.pathname.startsWith("/chats")) {
+        console.log("chats only middleware");
     }
-    if (!req.url.includes("/api")) {
-        if (!req.url.includes("/enter") && !req.cookies.get("appSession")) {
-            return NextResponse.redirect(`${req.nextUrl.origin}/enter`);
+
+    if (req.nextUrl.pathname.startsWith("/")) {
+        const ua = userAgent(req);
+        if (ua?.isBot) {
+            return new Response("No bots allowed.", { status: 403 });
         }
     }
-    return NextResponse.json({ success: true});
-}
 
+    if (req.nextUrl.pathname.startsWith("/api")) {
+        if (!req.url.includes("/enter") && !req.cookies.get("appSession")) {
+            NextResponse.redirect(`${req.nextUrl.origin}/enter`);
+        }
+    }
+
+    return NextResponse.next();
+}
 // if (request.nextUrl.pathname.startsWith('/about')) {
 //     // This logic is only applied to /about
 //   }
