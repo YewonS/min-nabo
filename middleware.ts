@@ -3,10 +3,6 @@ import type { NextRequest, NextFetchEvent } from "next/server";
 
 
 export function middleware(req: NextRequest, event: NextFetchEvent) {
-    if (req.nextUrl.pathname.startsWith("/chats")) {
-        console.log("chats only middleware");
-    }
-
     if (req.nextUrl.pathname.startsWith("/")) {
         const ua = userAgent(req);
         if (ua?.isBot) {
@@ -20,8 +16,9 @@ export function middleware(req: NextRequest, event: NextFetchEvent) {
         }
     }
 
+    // if (req.nextUrl.pathname.startsWith("/chats")) {
+    //     console.log("chats only middleware");
+    // }
+
     return NextResponse.next();
 }
-// if (request.nextUrl.pathname.startsWith('/about')) {
-//     // This logic is only applied to /about
-//   }
