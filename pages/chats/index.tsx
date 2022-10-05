@@ -3,6 +3,7 @@ import Link from "next/link";
 import Layout from "@components/layout";
 
 const Chats: NextPage = () => {
+  // TODO: implement this page
   return (
     <Layout hasTabBar title="Chats" seoTitle="Chats">
       <div className="space-y-4 divide-y-[1px] ">
