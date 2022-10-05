@@ -6,19 +6,41 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "open-studio": "npx prisma studio",
+    "run-db": "pscale connect min-nabo"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.1.2",
+    "@fortawesome/free-brands-svg-icons": "^6.1.2",
+    "@fortawesome/free-regular-svg-icons": "^6.1.2",
+    "@fortawesome/free-solid-svg-icons": "^6.1.2",
+    "@fortawesome/react-fontawesome": "^0.2.0",
+    "@prisma/client": "^4.2.1",
+    "@sendgrid/mail": "^7.7.0",
+    "@tailwindcss/forms": "^0.5.2",
+    "iron-session": "^6.1.3",
     "next": "12.2.5",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-hook-form": "^7.34.2",
+    "swr": "^1.3.0",
+    "ts-node": "^10.9.1",
+    "twilio": "^3.80.1"
   },
   "devDependencies": {
     "@types/node": "18.7.3",
     "@types/react": "18.0.17",
     "@types/react-dom": "18.0.6",
+    "autoprefixer": "^10.4.8",
     "eslint": "8.22.0",
     "eslint-config-next": "12.2.5",
+    "postcss": "^8.4.16",
+    "prisma": "^4.2.1",
+    "tailwindcss": "^3.1.8",
     "typescript": "4.7.4"
+  },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   }
 }
