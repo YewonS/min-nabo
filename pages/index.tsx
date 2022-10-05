@@ -1,14 +1,13 @@
 import type { NextPage } from "next";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; 
-import { faHeart, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { faHeart as faHeartRegular, faCommentDots } from "@fortawesome/free-regular-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import Layout from "@components/layout";
 import FloatingButton from "@components/floatingBtn";
 import Item from "@components/item";
 import useUser from "@libs/client/useUser";
-import Head from "next/head";
-import useSWR from "swr";
+import useSWR, { SWRConfig } from "swr";
 import { Item as DBItem } from "@prisma/client";
+import client from "@libs/server/client";
 
 export interface itemWithCount extends DBItem {
   _count: {
@@ -26,10 +25,7 @@ const Home: NextPage = () => {
   const { data } = useSWR<itemsResponse>("/api/items");
   
   return (
-    <Layout title="Home" hasTabBar={true}>
-      <Head>
-        <title>Home</title>
-      </Head>
+    <Layout title="Home" hasTabBar={true} seoTitle="Home">
       {/* List of items */}
       <div className="flex flex-col space-y-5">
         {data?.items?.map((item) => (
@@ -39,7 +35,7 @@ const Home: NextPage = () => {
             title={item.name}
             price={item.price}
             comments={1}
-            hearts={item._count.favs}
+            hearts={item._count?.favs || 0}
             image={item.imageURL}
           />
         ))}
@@ -61,4 +57,28 @@ const Home: NextPage = () => {
   );
 }
 
-export default Home;
+const Page: NextPage<{items: itemWithCount[]}> = ({items}) => {
+  return (
+    <SWRConfig value={{
+      fallback: {
+        "/api/items": {
+          ok: true,
+          items
+        }
+      }
+    }}>
+      <Home />
+    </SWRConfig>
+  );
+}
+
+export async function getServerSideProps() {
+  const items = await client.item.findMany({});
+  return {
+    props: {
+      items: JSON.parse(JSON.stringify(items)),
+    },
+  };
+}
+
+export default Page;

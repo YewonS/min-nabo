@@ -20,7 +20,7 @@ const Streams: NextPage = () => {
   const page = usePage(`/api/streams`);
   // const { data } = useSWR<StreamsResponse>(`/api/streams`);
   return (
-    <Layout hasTabBar title="Live Stream">
+    <Layout hasTabBar title="Live Stream" seoTitle="Live Streams">
       <div className="divide-y-[1px] space-y-4">
         {page?.map((stream) => (
           <Link key={stream.id} href={`/streams/${stream.id}`}>

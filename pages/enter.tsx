@@ -8,6 +8,14 @@ import Button from "@components/button";
 import Input from "@components/input";
 import useValidation from "@libs/client/useValidation";
 import { useRouter } from "next/router";
+// import dynamic from "next/dynamic";
+// const bs = dynamic(() => 
+//   new Promise((resolve) =>
+//     setTimeout(() => resolve(import("@components/some-big-components")), 1000)
+//   ),
+//   { ssr: false, loading: () => <div>Loading...</div> }
+// ); 
+// => imported when the user goes to the page where it needs button. loading on demand.
 
 interface LoginForm {
   email?: string;

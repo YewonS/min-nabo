@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "open-studio": "npx prisma studio",
+    "run-db": "pscale connect min-nabo"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.1.2",

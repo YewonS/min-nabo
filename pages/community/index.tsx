@@ -8,6 +8,7 @@ import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import useSWR from "swr";
 import { Post, User } from "@prisma/client";
 import useCoords from "@libs/client/useCoords";
+import client from "@libs/server/client";
 
 interface PostWithUser extends Post {
   user: User;
@@ -18,18 +19,17 @@ interface PostWithUser extends Post {
 }
 
 interface PostsResponse {
-  success: boolean;
   posts: PostWithUser[];
 }
 
-const Community: NextPage = () => {
-  const { latitude, longitude } = useCoords();
-  const { data, error } = useSWR<PostsResponse>(latitude && longitude ? `/api/posts?latitude=${latitude}&longitude=${longitude}` : null);
+const Community: NextPage<PostsResponse> = ({ posts }) => {
+  // const { latitude, longitude } = useCoords();
+  // const { data, error } = useSWR<PostsResponse>(latitude && longitude ? `/api/posts?latitude=${latitude}&longitude=${longitude}` : null);
 
   return (
-    <Layout hasTabBar title="Community News">
+    <Layout hasTabBar title="Community News" seoTitle="Community">
       <div className="space-y-4 divide-y-[2px]">
-        {data?.posts?.map((post) => (
+        {posts?.map((post) => (
           // Each question
           <Link key={post.id} href={`/community/${post.id}`}>
             <a className="flex cursor-pointer flex-col pt-4 items-start">
@@ -47,11 +47,11 @@ const Community: NextPage = () => {
               <div className="flex px-4 space-x-5 mt-3 text-gray-700 py-2.5 border-t w-full">
                 <span className="flex space-x-2 items-center text-sm">
                   <FontAwesomeIcon icon={faCircleCheck} className="w-4 h-4" />
-                  <span>Vote {post._count.votes}</span>
+                  <span>Vote {post._count?.votes}</span>
                 </span>
                 <span className="flex space-x-2 items-center text-sm">
                   <FontAwesomeIcon icon={faCommentDots} className="w-4 h-4" />
-                  <span>Answer {post._count.answers}</span>
+                  <span>Answer {post._count?.answers}</span>
                 </span>
               </div>
             </a>
@@ -65,5 +65,29 @@ const Community: NextPage = () => {
     </Layout>
   );
 };
+
+export async function getStaticProps() {
+  const posts = await client.post.findMany({
+    include: { 
+      user: true,
+      _count: {
+        select: {
+            votes: true,
+            answers: true,
+        }
+      }
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  return {
+    props: {
+      posts: JSON.parse(JSON.stringify(posts)),
+    },
+    revalidate: 20, // every 20 seconds it will revalidate. Incremental Static Regeneration (ISR)
+  };
+}
 
 export default Community;

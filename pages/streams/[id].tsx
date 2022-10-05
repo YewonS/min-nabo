@@ -74,7 +74,7 @@ const StreamDetail: NextPage = () => {
   };
 
   return (
-    <Layout canGoBack>
+    <Layout canGoBack seoTitle="Stream Detail">
       <div className="py-10 px-4 space-y-4">
         {/* Video image */}
         <div className="w-full rounded-md shadow-sm bg-slate-300 aspect-video" />

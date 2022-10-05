@@ -4,21 +4,26 @@ import { joinClassNames } from "@libs/client/utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; 
 import { faHouse, faNewspaper, faCommentDots, faVideo, faUser, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 interface LayoutProps {
     title?: string;
     canGoBack?: boolean;
     hasTabBar?: boolean;
     children: React.ReactNode; 
+    seoTitle?: string;
 }
 
-export default function Layout({ title, canGoBack, hasTabBar, children} : LayoutProps) {
+export default function Layout({ title, canGoBack, hasTabBar, children, seoTitle} : LayoutProps) {
     const router = useRouter();
     const onClickGoBack = () => {
         router.back();
     }
     return (
         <div>
+            <Head>
+                <title>{seoTitle ? `${seoTitle} | Min Nabo` : "Min Nabo"}</title>
+            </Head>
             {/* Title */}
             <div className="bg-white w-full h-12 max-w-xl justify-center text-lg px-10 font-medium  fixed text-gray-800 border-b top-0  flex items-center">
                 {canGoBack ? <button onClick={onClickGoBack} className="absolute left-4"><FontAwesomeIcon icon={faChevronLeft} /></button> : null}
